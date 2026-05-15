@@ -12,7 +12,7 @@ const settings = {
 };
 
 const MY_INFO = {
-    keywords: ["أوكسجينه","اونرنا"], 
+    keywords: ["شكرّا أصحابي","اونرنا"], 
     ownerId: "2481425"  
 };
 
