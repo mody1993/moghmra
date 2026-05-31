@@ -23,6 +23,24 @@ client.on('ready', async () => {
     await client.group.joinById(CHANNEL_TASKS);
     await client.group.joinById(CHANNEL_ALLIANCE);
     startAutomation();
+    // رسالة دورية كل 5 دقائق
+setInterval(async () => {
+    try {
+        await client.messaging.sendGroupMessage(CHANNEL_TASKS, '!مد صندوق فتح');
+        console.log("✅ تم إرسال '!مد صندوق فتح' دورياً للقناة");
+    } catch (err) {
+        console.error("❌ خطأ في الرسالة الدورية:", err.message);
+    }
+}, 300000); // 300,000 مللي ثانية = 5 دقائق
+// رسالة دورية كل ساعة
+setInterval(async () => {
+    try {
+        await client.messaging.sendGroupMessage(CHANNEL_TASKS, '!مد صندوق ضمان وقت');
+        console.log("✅ تم إرسال '!مد صندوق ضمان وقت' دورياً للقناة");
+    } catch (err) {
+        console.error("❌ خطأ في الرسالة الدورية (الساعة):", err.message);
+    }
+}, 3600000); // 3,600,000 
 });
 
 // --- الأتمتة ---
@@ -49,24 +67,6 @@ async function startAutomation() {
     }
 }
 
-// رسالة دورية كل 5 دقائق
-setInterval(async () => {
-    try {
-        await client.messaging.sendGroupMessage(CHANNEL_TASKS, '!مد صندوق فتح');
-        console.log("✅ تم إرسال '!مد صندوق فتح' دورياً للقناة");
-    } catch (err) {
-        console.error("❌ خطأ في الرسالة الدورية:", err.message);
-    }
-}, 300000); // 300,000 مللي ثانية = 5 دقائق
-// رسالة دورية كل ساعة
-setInterval(async () => {
-    try {
-        await client.messaging.sendGroupMessage(CHANNEL_TASKS, '!مد صندوق ضمان وقت');
-        console.log("✅ تم إرسال '!مد صندوق ضمان وقت' دورياً للقناة");
-    } catch (err) {
-        console.error("❌ خطأ في الرسالة الدورية (الساعة):", err.message);
-    }
-}, 3600000); // 3,600,000 مللي ثانية = ساعة واحدة
 
 // --- معالجة الصور ---
 async function isCaptchaByColor(buffer) {
