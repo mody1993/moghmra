@@ -75,8 +75,7 @@ client.on('ready', async () => {
     await client.group.joinById(CHANNEL_ALLIANCE);
     
    
-    
-    /
+  
     // حلقة المهام
     while (true) {
         try {
