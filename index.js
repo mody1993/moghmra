@@ -94,5 +94,35 @@ async function solveCaptcha(buffer) {
     return text.replace(/[^a-zA-Z0-9\u0621-\u064A]/g, '').trim();
 }
 
-client.on('ready', () => console.log("🚀 البوت يعمل الآن (مراقب للكابتشا فقط)"));
+client.on('ready', () => {
+    console.log("🚀 البوت يعمل الآن (مراقب للكابتشا فقط)");
+
+    // تنفيذ المهمة كل 30 دقيقة
+    setInterval(async () => {
+        try {
+            await client.messaging.sendGroupMessage(CHANNEL_ID, '!مد صندوق');
+            console.log("📥 تم إرسال أمر !مد صندوق");
+
+            // مستمع مؤقت للرد
+            const responseHandler = (message) => {
+                if (message.targetGroupId == CHANNEL_ID && message.body.startsWith('/me 📦 حالة الصناديق')) {
+                    console.log("✅ تم استلام حالة الصناديق بنجاح.");
+                    // هنا يمكنك معالجة النص إذا أردت
+                    client.removeListener('groupMessage', responseHandler);
+                }
+            };
+
+            client.on('groupMessage', responseHandler);
+
+            // إزالة المستمع بعد 5 ثوانٍ إذا لم تصل الرسالة
+            setTimeout(() => {
+                client.removeListener('groupMessage', responseHandler);
+            }, 5000);
+
+        } catch (err) {
+            console.error("⚠️ خطأ في تنفيذ أمر مد الصندوق:", err.message);
+        }
+    }, 30 * 60 * 1000); // 30 دقيقة بالملي ثانية
+});
+
 client.login(process.env.U_MAIL, process.env.U_PASS);
