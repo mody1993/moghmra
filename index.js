@@ -8,9 +8,9 @@ const { WOLF } = wolfjs;
 const client = new WOLF();
 
 // --- الإعدادات ---
-const TARGET_USER_ID = 76023604 ;
-const CHANNEL_ID = 224;
-const ALLOWED_PLAYERS = ['أوكسجينه', 'أوكسجيته', 'أوكسجيئه'];
+const TARGET_USER_ID = 84520028 ;
+const CHANNEL_ID = 569;
+const ALLOWED_PLAYERS = ['MLK'];
 
 // متغير عالمي للتايمر
 let globalTimer = 0;
