@@ -18,7 +18,8 @@ const accounts = [
     { email: process.env.U_MAIL_9, password: process.env.U_PASS_9 },
     { email: process.env.U_MAIL_10, password: process.env.U_PASS_10 },
     { email: process.env.U_MAIL_11, password: process.env.U_PASS_11 },
-    { email: process.env.U_MAIL_12, password: process.env.U_PASS_12 }
+    { email: process.env.U_MAIL_12, password: process.env.U_PASS_12 },
+    { email: process.env.U_MAIL_13, password: process.env.U_PASS_13 }
 ].filter(acc => acc.email && acc.password);
 
 function sendCommands(client, accountNumber) {
