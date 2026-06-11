@@ -1,4 +1,9 @@
+import 'dotenv/config';
+import wolfjs from 'wolf.js';
 
+const { WOLF } = wolfjs;
+
+const ROOM_ID = 18187126;
 
 // الحسابات
 const accounts = [
