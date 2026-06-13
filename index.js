@@ -1,4 +1,6 @@
-
+import 'dotenv/config';
+import wolfjs from 'wolf.js';
+const { WOLF } = wolfjs;
 // الحسابات + رقم الغرفة لكل حساب
 const accounts = [
     {
