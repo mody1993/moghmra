@@ -21,7 +21,7 @@ const accounts = [
     {
         email: process.env.U_MAIL_4,
         password: process.env.U_PASS_4,
-        roomId: 18187126
+        roomId: 330865
     },
     {
         email: process.env.U_MAIL_5,
@@ -51,12 +51,12 @@ const accounts = [
     {
         email: process.env.U_MAIL_10,
         password: process.env.U_PASS_10,
-        roomId: 18187126
+        roomId: 330865
     },
     {
         email: process.env.U_MAIL_11,
         password: process.env.U_PASS_11,
-        roomId: 18187126
+        roomId: 11066287
     },
     {
         email: process.env.U_MAIL_12,
