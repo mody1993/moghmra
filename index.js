@@ -67,6 +67,11 @@ const accounts = [
         email: process.env.U_MAIL_13,
         password: process.env.U_PASS_13,
         roomId: 569
+    },
+    {
+        email: process.env.U_MAIL_14,
+        password: process.env.U_PASS_14,
+        roomId: 569
     }
 ].filter(acc => acc.email && acc.password);
 function sendCommands(client, accountNumber, roomId) {
