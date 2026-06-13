@@ -56,7 +56,7 @@ const accounts = [
     {
         email: process.env.U_MAIL_11,
         password: process.env.U_PASS_11,
-        roomId: 11066287
+        roomId: 22271611
     },
     {
         email: process.env.U_MAIL_12,
