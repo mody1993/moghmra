@@ -1,8 +1,4 @@
-import 'dotenv/config';
-import wolfjs from 'wolf.js';
-const { WOLF } = wolfjs;
-// الحسابات + رقم الغرفة لكل حساب
-const accounts = [
+
     {
         email: process.env.U_MAIL_1,
         password: process.env.U_PASS_1,
