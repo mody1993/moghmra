@@ -78,6 +78,7 @@ const accounts = [
 function sendCommands(client, accountNumber, roomId) {
     client.messaging.sendGroupMessage(
         roomId,
+        
         '!مغامرة قتال'
     );
     console.log(
@@ -97,22 +98,79 @@ accounts.forEach((account, index) => {
     setTimeout(() => {
         const client = new WOLF();
         client.on('ready', () => {
+    console.log(
+        `✅ تم تسجيل دخول الحساب ${index + 1}`
+    );
+
+    // الأوامر الأساسية
+    sendCommands(
+        client,
+        index + 1,
+        account.roomId
+    );
+
+    setInterval(() => {
+        sendCommands(
+            client,
+            index + 1,
+            account.roomId
+        );
+    }, 184000);
+
+    // أوامر كل 30 دقيقة لجميع الحسابات
+    const send30MinCommands = () => {
+        client.messaging.sendGroupMessage(
+            account.roomId,
+            '!مغامرة تحالف سحب ذهب 25000'
+        );
+
+        console.log(
+            `[الحساب ${index + 1}] تم إرسال !مغامرة تحالف سحب ذهب 25000`
+        );
+
+        setTimeout(() => {
+            client.messaging.sendGroupMessage(
+                account.roomId,
+                '!مغامرة شراء 10'
+            );
+
             console.log(
-                `✅ تم تسجيل دخول الحساب ${index + 1}`
+                `[الحساب ${index + 1}] تم إرسال !مغامرة شراء 10`
             );
-            sendCommands(
-                client,
-                index + 1,
-                account.roomId
+        }, 3000);
+    };
+
+    // تشغيلها مباشرة
+    send30MinCommands();
+
+    // تكرار كل 30 دقيقة
+    setInterval(() => {
+        send30MinCommands();
+    }, 1800000);
+
+    // الحساب الأول فقط
+    if (index === 0) {
+        client.messaging.sendGroupMessage(
+            account.roomId,
+            '!مغامرة تحالف شراء 3'
+        );
+
+        console.log(
+            '[الحساب 1] تم إرسال !مغامرة تحالف شراء 3'
+        );
+
+        setInterval(() => {
+            client.messaging.sendGroupMessage(
+                account.roomId,
+                '!مغامرة تحالف شراء 3'
             );
-            setInterval(() => {
-                sendCommands(
-                    client,
-                    index + 1,
-                    account.roomId
-                );
-            }, 184000);
-        });
+
+            console.log(
+                '[الحساب 1] تم إرسال !مغامرة تحالف شراء 3'
+            );
+        }, 180000);
+    }
+});
         client.on('error', (err) => {
             console.error(
                 `❌ خطأ في الحساب ${index + 1}:`,
