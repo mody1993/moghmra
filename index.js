@@ -141,25 +141,28 @@ const client = new WOLF();
         setInterval(() => {
             send31MinCommands();
         }, 1860000);
-        // الحساب الأول فقط
-        if (index === 0) {
-            client.messaging.sendGroupMessage(
-                account.roomId,
-                '!مغامرة تحالف شراء 3'
-            );
-            console.log(
-                '[الحساب 1]  تم إرسال !مغامرة تحالف شراء 3 كل'
-            );
-            setInterval(() => {
-                client.messaging.sendGroupMessage(
-                    account.roomId,
-                    '!مغامرة تحالف شراء 3 كل'
-                );
-                console.log(
-                    '[الحساب 1] تم إرسال !مغامرة تحالف شراء 3 كل'
-                );
-            }, 180000);
-        }
+        //// الحساب الأول فقط
+if (index === 0) {
+    client.messaging.sendGroupMessage(
+        account.roomId,
+        '!مغامرة تحالف شراء 3 كل'
+    );
+
+    console.log(
+        '[الحساب 1] تم إرسال !مغامرة تحالف شراء 3 كل'
+    );
+
+    setInterval(() => {
+        client.messaging.sendGroupMessage(
+            account.roomId,
+            '!مغامرة تحالف شراء 3 كل'
+        );
+
+        console.log(
+            '[الحساب 1] تم إرسال !مغامرة تحالف شراء 3 كل'
+        );
+    }, 180000);
+}
     });
     client.on('error', (err) => {
         console.error(
