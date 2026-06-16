@@ -110,29 +110,40 @@ const client = new WOLF();
         // سحب ذهب + شراء 10
         // ==========================
         const send31MinCommands = () => {
-            client.messaging.sendGroupMessage(
-                account.roomId,
-                '!مغامرة تحالف سحب ذهب 25000'
-            );
-            console.log(
-                `[الحساب ${index + 1}] تم إرسال !مغامرة تحالف سحب ذهب 25000`
-            );
-            setTimeout(() => {
-                client.messaging.sendGroupMessage(
-                    account.roomId,
-                    '!مغامرة شراء 10'
-                );
-                console.log(
-                    `[الحساب ${index + 1}] تم إرسال !مغامرة شراء 10`
-                );
-            }, 3000);
-        };
+
+    // سحب الذهب
+    client.messaging.sendGroupMessage(
+        account.roomId,
+        '!مغامرة تحالف سحب ذهب 25000'
+    );
+
+    console.log(
+        `[الحساب ${index + 1}] تم إرسال !مغامرة تحالف سحب ذهب 25000`
+    );
+
+    // بعد 3 ثوانٍ شراء 10
+    setTimeout(() => {
+
+        client.messaging.sendGroupMessage(
+            account.roomId,
+            '!مغامرة شراء 10'
+        );
+
+        console.log(
+            `[الحساب ${index + 1}] تم إرسال !مغامرة شراء 10`
+        );
+
+        // بعد 7 ثوانٍ من شراء 10
+        setTimeout(() => {
+            sendCommands();
+        }, 7000);
+
+    }, 3000);
+};
         // أول تشغيل
         send31MinCommands();
         // بعد 3 ثوانٍ من شراء 10
-        setTimeout(() => {
-            sendCommands();
-        }, 10000);
+
         // قتال + إيداع كل 3 دقائق و3 ثوانٍ
         setInterval(() => {
             sendCommands();
