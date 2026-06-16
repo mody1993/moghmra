@@ -132,7 +132,7 @@ const client = new WOLF();
         // بعد 3 ثوانٍ من شراء 10
         setTimeout(() => {
             sendCommands();
-        }, 6000);
+        }, 10000);
         // قتال + إيداع كل 3 دقائق و3 ثوانٍ
         setInterval(() => {
             sendCommands();
