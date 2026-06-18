@@ -82,66 +82,103 @@ setTimeout(() => {
 const client = new WOLF();
 
     client.on('ready', () => {
-        console.log(
-            `✅ تم تسجيل دخول الحساب ${index + 1}`
-        );
+    console.log(
+        `✅ تم تسجيل دخول الحساب ${index + 1}`
+    );
+
+    let depositInProgress = false;
         // ==========================
         // قتال + إيداع
         // ==========================
         const sendCommands = () => {
-            client.messaging.sendGroupMessage(
-                account.roomId,
-                '!مغامرة قتال'
-            );
-            console.log(
-                `[الحساب ${index + 1}] تم إرسال !مغامرة قتال إلى الغرفة ${account.roomId}`
-            );
-            setTimeout(() => {
-                client.messaging.sendGroupMessage(
-                    account.roomId,
-                    '!مغامرة تحالف ايداع كل'
-                );
-                console.log(
-                    `[الحساب ${index + 1}] تم إرسال !مغامرة تحالف ايداع كل إلى الغرفة ${account.roomId}`
-                );
-            }, 3000);
-        };
-        // ==========================
-        // سحب ذهب + شراء 10
-        // ==========================
-        const send31MinCommands = () => {
 
-    // سحب الذهب
+    depositInProgress = true;
+
     client.messaging.sendGroupMessage(
         account.roomId,
-        '!مغامرة تحالف سحب ذهب 25000'
+        '!مغامرة قتال'
     );
 
     console.log(
-        `[الحساب ${index + 1}] تم إرسال !مغامرة تحالف سحب ذهب 25000`
+        `[الحساب ${index + 1}] تم إرسال !مغامرة قتال إلى الغرفة ${account.roomId}`
     );
 
-    // بعد 3 ثوانٍ شراء 10
     setTimeout(() => {
 
         client.messaging.sendGroupMessage(
             account.roomId,
-            '!مغامرة شراء 10'
+            '!مغامرة تحالف ايداع كل'
         );
 
         console.log(
-            `[الحساب ${index + 1}] تم إرسال !مغامرة شراء 10`
+            `[الحساب ${index + 1}] تم إرسال !مغامرة تحالف ايداع كل إلى الغرفة ${account.roomId}`
         );
 
-        // بعد 7 ثوانٍ من شراء 10
         setTimeout(() => {
-            sendCommands();
-        }, 7000);
+            depositInProgress = false;
+        }, 2000);
 
     }, 3000);
 };
-        // أول تشغيل
-        send31MinCommands();
+        // ==========================
+        // سحب ذهب + شراء 10
+        // ==========================
+       const send31MinCommands = () => {
+
+    const startPurchaseCycle = () => {
+
+        client.messaging.sendGroupMessage(
+            account.roomId,
+            '!مغامرة تحالف سحب ذهب 25000'
+        );
+
+        console.log(
+            `[الحساب ${index + 1}] تم إرسال !مغامرة تحالف سحب ذهب 25000`
+        );
+
+        setTimeout(() => {
+
+            client.messaging.sendGroupMessage(
+                account.roomId,
+                '!مغامرة شراء 10'
+            );
+
+            console.log(
+                `[الحساب ${index + 1}] تم إرسال !مغامرة شراء 10`
+            );
+
+        }, 3000);
+    };
+
+    if (depositInProgress) {
+
+        console.log(
+            `[الحساب ${index + 1}] انتظار انتهاء الإيداع قبل السحب`
+        );
+
+        const waitInterval = setInterval(() => {
+
+            if (!depositInProgress) {
+
+                clearInterval(waitInterval);
+
+                startPurchaseCycle();
+
+            }
+
+        }, 1000);
+
+        return;
+    }
+
+    startPurchaseCycle();
+};// أول تشغيل
+send31MinCommands();
+
+// يبدأ القتال والإيداع بعد الشراء بـ 10 ثواني
+setTimeout(() => {
+    sendCommands();
+}, 13000);
         // بعد 3 ثوانٍ من شراء 10
 
         // قتال + إيداع كل 3 دقائق و3 ثوانٍ
