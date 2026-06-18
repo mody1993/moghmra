@@ -23,97 +23,127 @@ const accounts = [
     { email: process.env.U_MAIL_14, password: process.env.U_PASS_14, roomId: 569 }
 ].filter(acc => acc.email && acc.password);
 
+// نخزن هنا كل الحسابات بعد تسجيل الدخول
+const bots = [];
+
+let readyCount = 0;
+let centralCycleStarted = false;
+
 // ==========================
-// تشغيل كل حساب بفاصل ثانيتين
+// تشغيل دورة القتال المركزية
+// ==========================
+function startCentralCycle() {
+    if (centralCycleStarted) return;
+    centralCycleStarted = true;
+
+    console.log('🚀 بدأت الدورة المركزية للحسابات');
+
+    const runCycle = () => {
+        console.log('🔁 بداية دورة جديدة من الحساب 1');
+
+        bots.forEach((bot, index) => {
+            // كل حساب يبدأ بعد الحساب السابق بـ 3 ثواني
+            setTimeout(() => {
+                runAccountCycle(bot, index);
+            }, index * 3000);
+        });
+
+        // وقت انتهاء آخر حساب:
+        // فرق الحسابات + وقت وصول آخر حساب للإيداع + انتظار 10 ثواني
+        const restartDelay =
+            (bots.length - 1) * 3000 + 12000 + 10000;
+
+        setTimeout(() => {
+            console.log('✅ آخر حساب أرسل الإيداع، انتظار 10 ثواني انتهى، إعادة الدورة');
+            runCycle();
+        }, restartDelay);
+    };
+
+    runCycle();
+}
+
+// ==========================
+// دورة الحساب الواحد
+// ==========================
+function runAccountCycle(bot, index) {
+    const { client, account } = bot;
+
+    bot.depositInProgress = true;
+
+    // الحساب الأول فقط يسحب 5,000,000
+    if (index === 0) {
+        client.messaging.sendGroupMessage(
+            account.roomId,
+            '!مغامرة تحالف سحب ذهب 5000000'
+        );
+
+        console.log('[الحساب 1] تم إرسال !مغامرة تحالف سحب ذهب 5000000');
+
+        // الحساب الأول فقط يرسل تعزيز بعد 3 ثواني
+        setTimeout(() => {
+            client.messaging.sendGroupMessage(
+                account.roomId,
+                '!مغامرة تعزيز'
+            );
+
+            console.log('[الحساب 1] تم إرسال !مغامرة تعزيز');
+        }, 3000);
+    }
+
+    // كل الحسابات ترسل قتال 3 مرات
+    setTimeout(() => {
+        client.messaging.sendGroupMessage(account.roomId, '!مغامرة قتال');
+        console.log(`[الحساب ${index + 1}] تم إرسال قتال 1`);
+    }, 6000);
+
+    setTimeout(() => {
+        client.messaging.sendGroupMessage(account.roomId, '!مغامرة قتال');
+        console.log(`[الحساب ${index + 1}] تم إرسال قتال 2`);
+    }, 8000);
+
+    setTimeout(() => {
+        client.messaging.sendGroupMessage(account.roomId, '!مغامرة قتال');
+        console.log(`[الحساب ${index + 1}] تم إرسال قتال 3`);
+    }, 10000);
+
+    // كل الحسابات ترسل إيداع بعد القتال
+    setTimeout(() => {
+        client.messaging.sendGroupMessage(
+            account.roomId,
+            '!مغامرة تحالف ايداع كل'
+        );
+
+        console.log(`[الحساب ${index + 1}] تم إرسال !مغامرة تحالف ايداع كل`);
+
+        setTimeout(() => {
+            bot.depositInProgress = false;
+        }, 2000);
+
+    }, 12000);
+}
+
+// ==========================
+// تشغيل الحسابات
 // ==========================
 accounts.forEach((account, index) => {
     setTimeout(() => {
         const client = new WOLF();
 
+        const bot = {
+            client,
+            account,
+            depositInProgress: false
+        };
+
+        bots[index] = bot;
+
         client.on('ready', () => {
             console.log(`✅ تم تسجيل دخول الحساب ${index + 1}`);
 
-            let depositInProgress = false;
+            readyCount++;
 
             // ==========================
-            // الدورة الجديدة
-            // ==========================
-            const sendCommands = () => {
-                depositInProgress = true;
-
-                // الحساب الأول فقط يسحب 5,000,000
-                if (index === 0) {
-                    client.messaging.sendGroupMessage(
-                        account.roomId,
-                        '!مغامرة تحالف سحب ذهب 5000000'
-                    );
-
-                    console.log('[الحساب 1] تم إرسال !مغامرة تحالف سحب ذهب 5000000');
-                }
-
-                // الحساب الأول فقط يرسل تعزيز بعد 3 ثواني
-                if (index === 0) {
-                    setTimeout(() => {
-                        client.messaging.sendGroupMessage(
-                            account.roomId,
-                            '!مغامرة تعزيز'
-                        );
-
-                        console.log('[الحساب 1] تم إرسال !مغامرة تعزيز');
-                    }, 3000);
-                }
-
-                // كل الحسابات ترسل قتال 3 مرات
-                // أول قتال بعد 6 ثواني
-                setTimeout(() => {
-                    client.messaging.sendGroupMessage(
-                        account.roomId,
-                        '!مغامرة قتال'
-                    );
-
-                    console.log(`[الحساب ${index + 1}] تم إرسال قتال 1`);
-                }, 6000);
-
-                // ثاني قتال بعده بثانيتين
-                setTimeout(() => {
-                    client.messaging.sendGroupMessage(
-                        account.roomId,
-                        '!مغامرة قتال'
-                    );
-
-                    console.log(`[الحساب ${index + 1}] تم إرسال قتال 2`);
-                }, 8000);
-
-                // ثالث قتال بعده بثانيتين
-                setTimeout(() => {
-                    client.messaging.sendGroupMessage(
-                        account.roomId,
-                        '!مغامرة قتال'
-                    );
-
-                    console.log(`[الحساب ${index + 1}] تم إرسال قتال 3`);
-                }, 10000);
-
-                // كل الحسابات ترسل إيداع كل بعد القتال
-                setTimeout(() => {
-                    client.messaging.sendGroupMessage(
-                        account.roomId,
-                        '!مغامرة تحالف ايداع كل'
-                    );
-
-                    console.log(`[الحساب ${index + 1}] تم إرسال !مغامرة تحالف ايداع كل`);
-
-                    // بعد ثانيتين نعتبر الإيداع انتهى
-                    setTimeout(() => {
-                        depositInProgress = false;
-                    }, 2000);
-
-                }, 12000);
-            };
-
-            // ==========================
-            // دورة 31 دقيقة
-            // كما هي بدون تغيير
+            // دورة 31 دقيقة كما هي
             // ==========================
             const send31MinCommands = () => {
                 const startPurchaseCycle = () => {
@@ -124,7 +154,6 @@ accounts.forEach((account, index) => {
 
                     console.log(`[الحساب ${index + 1}] تم إرسال !مغامرة تحالف سحب ذهب 25000`);
 
-                    // بعد 3 ثواني يرسل شراء 10
                     setTimeout(() => {
                         client.messaging.sendGroupMessage(
                             account.roomId,
@@ -135,12 +164,12 @@ accounts.forEach((account, index) => {
                     }, 3000);
                 };
 
-                // إذا كان فيه إيداع شغال ينتظر لين ينتهي
-                if (depositInProgress) {
-                    console.log(`[الحساب ${index + 1}] انتظار انتهاء الإيداع قبل السحب`);
+                // إذا كان الحساب في إيداع، ينتظر لين يخلص
+                if (bot.depositInProgress) {
+                    console.log(`[الحساب ${index + 1}] انتظار انتهاء الإيداع قبل دورة 31 دقيقة`);
 
                     const waitInterval = setInterval(() => {
-                        if (!depositInProgress) {
+                        if (!bot.depositInProgress) {
                             clearInterval(waitInterval);
                             startPurchaseCycle();
                         }
@@ -155,19 +184,6 @@ accounts.forEach((account, index) => {
             // أول تشغيل لدورة 31 دقيقة
             send31MinCommands();
 
-            // تشغيل الدورة الجديدة بفاصل 3 ثواني بين كل حساب
-            setTimeout(() => {
-                sendCommands();
-            }, 13000 + index * 3000);
-
-            // تكرار الدورة بعد آخر حساب بـ 10 ثواني
-            const cycleDelay =
-                (accounts.length - 1) * 3000 + 12000 + 10000;
-
-            setInterval(() => {
-                sendCommands();
-            }, cycleDelay);
-
             // تكرار دورة 31 دقيقة
             setInterval(() => {
                 send31MinCommands();
@@ -175,7 +191,6 @@ accounts.forEach((account, index) => {
 
             // ==========================
             // الحساب الأول فقط - شراء الدرع
-            // كما هو بدون تغيير
             // ==========================
             if (index === 0) {
                 client.messaging.sendGroupMessage(
@@ -185,7 +200,6 @@ accounts.forEach((account, index) => {
 
                 console.log('[الحساب 1] تم إرسال !مغامرة تحالف شراء 3 كل');
 
-                // تكرار شراء الدرع كل 3 دقائق
                 setInterval(() => {
                     client.messaging.sendGroupMessage(
                         account.roomId,
@@ -195,6 +209,11 @@ accounts.forEach((account, index) => {
                     console.log('[الحساب 1] تم إرسال !مغامرة تحالف شراء 3 كل');
                 }, 180000);
             }
+
+            // لا تبدأ الدورة المركزية إلا بعد دخول كل الحسابات
+            if (readyCount === accounts.length) {
+                startCentralCycle();
+            }
         });
 
         client.on('error', (err) => {
@@ -203,10 +222,7 @@ accounts.forEach((account, index) => {
 
         console.log(`⏳ جاري تسجيل دخول الحساب ${index + 1}`);
 
-        client.login(
-            account.email,
-            account.password
-        );
+        client.login(account.email, account.password);
 
     }, index * 2000);
 });
