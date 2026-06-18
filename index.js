@@ -3,7 +3,9 @@ import wolfjs from 'wolf.js';
 
 const { WOLF } = wolfjs;
 
+// ==========================
 // الحسابات + رقم الغرفة لكل حساب
+// ==========================
 const accounts = [
     { email: process.env.U_MAIL_1, password: process.env.U_PASS_1, roomId: 569 },
     { email: process.env.U_MAIL_2, password: process.env.U_PASS_2, roomId: 569 },
@@ -21,6 +23,9 @@ const accounts = [
     { email: process.env.U_MAIL_14, password: process.env.U_PASS_14, roomId: 569 }
 ].filter(acc => acc.email && acc.password);
 
+// ==========================
+// تشغيل كل حساب بفاصل ثانيتين
+// ==========================
 accounts.forEach((account, index) => {
     setTimeout(() => {
         const client = new WOLF();
@@ -36,24 +41,30 @@ accounts.forEach((account, index) => {
             const sendCommands = () => {
                 depositInProgress = true;
 
-                client.messaging.sendGroupMessage(
-                    account.roomId,
-                    '!مغامرة تحالف سحب ذهب 5000000'
-                );
+                // الحساب الأول فقط يسحب 5,000,000
+                if (index === 0) {
+                    client.messaging.sendGroupMessage(
+                        account.roomId,
+                        '!مغامرة تحالف سحب ذهب 5000000'
+                    );
 
-                console.log(`[الحساب ${index + 1}] تم إرسال سحب ذهب 5000000`);
+                    console.log('[الحساب 1] تم إرسال !مغامرة تحالف سحب ذهب 5000000');
+                }
 
-                setTimeout(() => {
-                    if (index === 0) {
+                // الحساب الأول فقط يرسل تعزيز بعد 3 ثواني
+                if (index === 0) {
+                    setTimeout(() => {
                         client.messaging.sendGroupMessage(
                             account.roomId,
                             '!مغامرة تعزيز'
                         );
 
                         console.log('[الحساب 1] تم إرسال !مغامرة تعزيز');
-                    }
-                }, 3000);
+                    }, 3000);
+                }
 
+                // كل الحسابات ترسل قتال 3 مرات
+                // أول قتال بعد 6 ثواني
                 setTimeout(() => {
                     client.messaging.sendGroupMessage(
                         account.roomId,
@@ -63,6 +74,7 @@ accounts.forEach((account, index) => {
                     console.log(`[الحساب ${index + 1}] تم إرسال قتال 1`);
                 }, 6000);
 
+                // ثاني قتال بعده بثانيتين
                 setTimeout(() => {
                     client.messaging.sendGroupMessage(
                         account.roomId,
@@ -72,6 +84,7 @@ accounts.forEach((account, index) => {
                     console.log(`[الحساب ${index + 1}] تم إرسال قتال 2`);
                 }, 8000);
 
+                // ثالث قتال بعده بثانيتين
                 setTimeout(() => {
                     client.messaging.sendGroupMessage(
                         account.roomId,
@@ -81,6 +94,7 @@ accounts.forEach((account, index) => {
                     console.log(`[الحساب ${index + 1}] تم إرسال قتال 3`);
                 }, 10000);
 
+                // كل الحسابات ترسل إيداع كل بعد القتال
                 setTimeout(() => {
                     client.messaging.sendGroupMessage(
                         account.roomId,
@@ -89,6 +103,7 @@ accounts.forEach((account, index) => {
 
                     console.log(`[الحساب ${index + 1}] تم إرسال !مغامرة تحالف ايداع كل`);
 
+                    // بعد ثانيتين نعتبر الإيداع انتهى
                     setTimeout(() => {
                         depositInProgress = false;
                     }, 2000);
@@ -97,8 +112,8 @@ accounts.forEach((account, index) => {
             };
 
             // ==========================
-            // سحب ذهب + شراء 10 كل 31 دقيقة
-            // كما هو بدون تغيير
+            // دورة 31 دقيقة
+            // كما هي بدون تغيير
             // ==========================
             const send31MinCommands = () => {
                 const startPurchaseCycle = () => {
@@ -109,6 +124,7 @@ accounts.forEach((account, index) => {
 
                     console.log(`[الحساب ${index + 1}] تم إرسال !مغامرة تحالف سحب ذهب 25000`);
 
+                    // بعد 3 ثواني يرسل شراء 10
                     setTimeout(() => {
                         client.messaging.sendGroupMessage(
                             account.roomId,
@@ -119,6 +135,7 @@ accounts.forEach((account, index) => {
                     }, 3000);
                 };
 
+                // إذا كان فيه إيداع شغال ينتظر لين ينتهي
                 if (depositInProgress) {
                     console.log(`[الحساب ${index + 1}] انتظار انتهاء الإيداع قبل السحب`);
 
@@ -138,7 +155,7 @@ accounts.forEach((account, index) => {
             // أول تشغيل لدورة 31 دقيقة
             send31MinCommands();
 
-            // تشغيل الدورة الجديدة بفارق 3 ثواني بين كل حساب
+            // تشغيل الدورة الجديدة بفاصل 3 ثواني بين كل حساب
             setTimeout(() => {
                 sendCommands();
             }, 13000 + index * 3000);
@@ -151,7 +168,7 @@ accounts.forEach((account, index) => {
                 sendCommands();
             }, cycleDelay);
 
-            // دورة 31 دقيقة كما هي
+            // تكرار دورة 31 دقيقة
             setInterval(() => {
                 send31MinCommands();
             }, 1860000);
@@ -168,6 +185,7 @@ accounts.forEach((account, index) => {
 
                 console.log('[الحساب 1] تم إرسال !مغامرة تحالف شراء 3 كل');
 
+                // تكرار شراء الدرع كل 3 دقائق
                 setInterval(() => {
                     client.messaging.sendGroupMessage(
                         account.roomId,
