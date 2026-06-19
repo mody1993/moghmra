@@ -1,5 +1,3 @@
-مغامرة معزز
-
 import 'dotenv/config';
 import wolfjs from 'wolf.js';
 
