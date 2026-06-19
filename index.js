@@ -1,4 +1,4 @@
-بوت مغامرة
+// بوت مغامرة
 
 import 'dotenv/config';
 import wolfjs from 'wolf.js';
