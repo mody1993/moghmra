@@ -2,6 +2,11 @@
 // يبدأ بالكود الثاني ساعة، ثم الكود الأول ساعة، ويتكرر
 // دورة 31 دقيقة وشراء 3 كل مستمرة دائمًا
 
+import 'dotenv/config';
+import wolfjs from 'wolf.js';
+
+const { WOLF } = wolfjs;
+
 
 // ==========================
 // الإعدادات العامة
@@ -211,7 +216,7 @@ function runCode2AccountCycle(bot, index) {
 
     // الحساب الأول فقط يسحب 5 مليون ثم يرسل تعزيز
     if (index === 0) {
-        sendCommand(bot, '!مغامرة تحالف سحب ذهب 5000000');
+        sendCommand(bot, '!مغامرة تحالف سحب ذهب 30000000');
 
         addModeTimeout(() => {
             if (currentMode !== 'CODE2') return;
