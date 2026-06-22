@@ -4,10 +4,7 @@
 // في CODE2 أصبح القتال 4 مرات بدل 3 مرات
 // في دورة 61 دقيقة صار بين كل حساب وحساب 3 ثواني
 
-import 'dotenv/config';
-import wolfjs from 'wolf.js';
 
-const { WOLF } = wolfjs;
 
 
 // ==========================
